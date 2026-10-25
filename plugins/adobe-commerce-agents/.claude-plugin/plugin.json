@@ -1,0 +1,12 @@
+{
+	"name": "adobe-commerce-agents",
+	"displayName": "Adobe Commerce Agents",
+	"description": "Cinco subagentes para el desarrollo PHP de Adobe Commerce (exploración, revisión previa al deploy, QA, arquitectura de integraciones y documentación) más el servidor MCP adobe-commerce-mcp: documentación oficial, archivos de configuración, bin/magento y Web API sin salir del editor.",
+	"version": "0.1.0",
+	"author": { "name": "José Luiz Rodrigues", "url": "https://github.com/zeluizr" },
+	"homepage": "https://github.com/zeluizr/adobe-commerce-agents",
+	"repository": "https://github.com/zeluizr/adobe-commerce-agents",
+	"license": "MIT",
+	"keywords": ["adobe-commerce", "magento", "php", "ecommerce", "subagents", "mcp", "latam"],
+	"mcpServers": "./.mcp.json"
+}

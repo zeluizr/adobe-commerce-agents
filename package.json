@@ -1,0 +1,19 @@
+{
+	"name": "adobe-commerce-agents",
+	"private": true,
+	"description": "Gate del repositorio del plugin adobe-commerce-agents. No es un paquete publicable.",
+	"type": "module",
+	"license": "MIT",
+	"engines": {
+		"node": ">=20"
+	},
+	"scripts": {
+		"verificar": "./scripts/verificar.sh",
+		"probar-mcp": "node scripts/probar-mcp.mjs",
+		"format": "prettier --write .",
+		"format:check": "prettier --check ."
+	},
+	"devDependencies": {
+		"prettier": "3.9.8"
+	}
+}

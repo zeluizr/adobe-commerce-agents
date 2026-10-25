@@ -1,0 +1,9 @@
+{
+	"mcpServers": {
+		"adobe-commerce": {
+			"type": "stdio",
+			"command": "npx",
+			"args": ["-y", "adobe-commerce-mcp"]
+		}
+	}
+}
