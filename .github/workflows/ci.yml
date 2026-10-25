@@ -1,0 +1,103 @@
+# Gate del repositorio en cada push y pull request de las tres ramas.
+# El mismo ./scripts/verificar.sh que se corre en la máquina.
+name: ci
+
+on:
+  push:
+    branches: [dev, qa, main]
+  pull_request:
+    branches: [dev, qa, main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  verificar:
+    name: gate del repositorio
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # Para `claude plugin validate`, que no necesita sesión iniciada.
+      - run: npm install --global @anthropic-ai/claude-code
+      - run: ./scripts/verificar.sh
+
+  mcp:
+    name: el servidor MCP arranca y lista sus herramientas
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      # Ejecuta el mismo comando que .mcp.json (npx -y adobe-commerce-mcp) y pide la
+      # lista de tools por stdio: si el paquete deja de publicarse o cambia el nombre de
+      # una tool que un agente usa, falla aquí y no en la sesión de quien instaló el plugin.
+      # Falla también mientras el paquete no esté publicado en npm.
+      - run: node scripts/probar-mcp.mjs
+
+  secretos:
+    name: búsqueda de secretos
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  ramas:
+    name: flujo dev -> qa -> main
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    if: github.event_name == 'push' && (github.ref_name == 'qa' || github.ref_name == 'main')
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      # La promoción es merge de la rama entera: qa no tiene commits propios, solo
+      # merges de dev; main solo merges de qa, y el commit de main lleva tag.
+      - name: qa solo recibe lo que ya está en dev
+        if: github.ref_name == 'qa'
+        run: |
+          git fetch --quiet origin dev
+          PROPIOS=$(git log --no-merges --format='%h %s' origin/dev.."$GITHUB_SHA")
+          if [ -n "$PROPIOS" ]; then
+            echo "::error::qa tiene commits que no están en dev:"
+            echo "$PROPIOS"
+            exit 1
+          fi
+      - name: main solo recibe lo que ya está en qa, con tag anotado
+        if: github.ref_name == 'main'
+        run: |
+          git fetch --quiet --tags origin qa
+          PROPIOS=$(git log --no-merges --format='%h %s' origin/qa.."$GITHUB_SHA")
+          if [ -n "$PROPIOS" ]; then
+            echo "::error::main tiene commits que no están en qa:"
+            echo "$PROPIOS"
+            exit 1
+          fi
+          TAG=$(git describe --exact-match --tags "$GITHUB_SHA" 2>/dev/null || true)
+          if [ -z "$TAG" ]; then
+            echo "::error::el commit de main no tiene tag de versión"
+            exit 1
+          fi
+          if [ "$(git cat-file -t "refs/tags/$TAG")" != "tag" ]; then
+            echo "::error::el tag $TAG no es anotado"
+            exit 1
+          fi
