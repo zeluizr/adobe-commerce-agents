@@ -20,9 +20,9 @@ Por eso cada uno tiene una regla explícita de formato de salida, y por eso `ado
 
 El campo `skills` del frontmatter inyecta el contenido completo de cada skill en el contexto del subagente al arrancar, no solo su descripción. Precargar diez skills significa que el agente empieza a trabajar con la ventana ya cargada de conocimiento que quizá no aplique al caso.
 
-El límite de cuatro es arbitrario en el número pero no en la intención: precargas lo que el agente va a necesitar casi siempre, y dejas el resto para que lo pida si lo necesita. Los cinco agentes tienen el tool `Skill` habilitado, así que las once skills de [adobe-commerce-skills](https://github.com/zeluizr/adobe-commerce-skills) y las oficiales de App Builder siguen disponibles bajo demanda.
+El límite de cuatro es arbitrario en el número pero no en la intención: precargas lo que el agente va a necesitar casi siempre, y dejas el resto para que lo pida si lo necesita. Los cinco agentes tienen el tool `Skill` habilitado, así que las once skills de [adobe-commerce-skills](https://github.com/commentemeapp/adobe-commerce-skills) y las oficiales de App Builder siguen disponibles bajo demanda.
 
-La consecuencia práctica es que la elección de las skills precargadas es una apuesta sobre el caso típico de cada agente, no sobre su caso máximo. El gate comprueba en GitHub que cada skill precargada exista en `zeluizr/adobe-commerce-skills` o en `adobe/skills`; sin red, lo deja como aviso.
+La consecuencia práctica es que la elección de las skills precargadas es una apuesta sobre el caso típico de cada agente, no sobre su caso máximo. El gate comprueba en GitHub que cada skill precargada exista en `commentemeapp/adobe-commerce-skills` o en `adobe/skills`; sin red, lo deja como aviso.
 
 ### Las skills oficiales de App Builder: disponibles, ninguna precargada
 
@@ -46,7 +46,7 @@ En Adobe Commerce hay una razón más: `bin/magento` está a un comando de cambi
 
 ### El servidor MCP es fuente, no cerebro
 
-El plugin trae el servidor MCP `adobe-commerce`, que es [adobe-commerce-mcp](https://github.com/zeluizr/adobe-commerce-mcp) ejecutado con `npx -y adobe-commerce-mcp`. Viaja con su conocimiento dentro del paquete: la documentación de cuatro repositorios de AdobeDocs (`commerce-php`, `commerce-frontend-core`, `commerce-webapi` y `commerce-operations.en`), la referencia de `bin/magento`, el esquema OpenAPI de REST y la referencia de GraphQL. No abre conexiones ni pide credenciales.
+El plugin trae el servidor MCP `adobe-commerce`, que es [adobe-commerce-mcp](https://github.com/commentemeapp/adobe-commerce-mcp) ejecutado con `npx -y @commenteme/adobe-commerce-mcp`. Viaja con su conocimiento dentro del paquete: la documentación de cuatro repositorios de AdobeDocs (`commerce-php`, `commerce-frontend-core`, `commerce-webapi` y `commerce-operations.en`), la referencia de `bin/magento`, el esquema OpenAPI de REST y la referencia de GraphQL. No abre conexiones ni pide credenciales.
 
 Expone diez herramientas. Cinco son de consulta (`search-docs`, `read-doc`, `explain-config-file`, `lookup-cli-command`, `lookup-webapi`) y cinco de scaffolding (`scaffold-module`, `add-plugin`, `add-observer`, `add-controller`, `add-db-schema`). La regla fue la misma que para las skills: cada agente recibe solo las de consulta que su caso típico necesita, y ninguno recibe las de scaffolding. Esas devuelven archivos para escribir, y escribir es trabajo de la conversación principal. Un agente read-only con herramientas de scaffolding sería una contradicción, y `scripts/probar-mcp.mjs` falla si alguien se la da a uno.
 

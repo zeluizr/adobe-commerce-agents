@@ -29,7 +29,7 @@ solo las que aparezcan listadas.
 Sigue este orden. No saltes pasos.
 
 1. **El servidor MCP `adobe-commerce`, que viene con este plugin.** Es tu primera
-   fuente: viaja dentro del paquete `adobe-commerce-mcp`, no depende de la red y
+   fuente: viaja dentro del paquete `@commenteme/adobe-commerce-mcp`, no depende de la red y
    contiene las páginas de cuatro repositorios de documentación oficial (extensiones
    PHP, frontend, Web API y operaciones). Empieza con `search-docs` para encontrar la
    página (con `area` en `php`, `frontend`, `webapi` u `operations` si la pregunta es

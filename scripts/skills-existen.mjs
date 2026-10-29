@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Comprueba que cada skill pasada como argumento exista en uno de los dos repositorios de
-// los que se instalan: zeluizr/adobe-commerce-skills (una carpeta por skill en skills/) o
+// los que se instalan: commentemeapp/adobe-commerce-skills (una carpeta por skill en skills/) o
 // adobe/skills (cualquier SKILL.md cuyo frontmatter tenga ese name). Lo usa verificar.sh.
 //
 //   node scripts/skills-existen.mjs adobe-commerce-security commerce-app-eventing
@@ -20,7 +20,7 @@ const pedir = async (url, json = true) => {
 let propias;
 let oficiales;
 try {
-	const contenido = await pedir("https://api.github.com/repos/zeluizr/adobe-commerce-skills/contents/skills");
+	const contenido = await pedir("https://api.github.com/repos/commentemeapp/adobe-commerce-skills/contents/skills");
 	propias = new Set(contenido.filter((x) => x.type === "dir").map((x) => x.name));
 	const arbol = await pedir("https://api.github.com/repos/adobe/skills/git/trees/HEAD?recursive=1");
 	oficiales = arbol.tree.filter((x) => x.type === "blob" && x.path.endsWith("/SKILL.md")).map((x) => x.path);
@@ -35,7 +35,7 @@ const origen = [];
 try {
 	for (const skill of skills) {
 		if (propias.has(skill)) {
-			origen.push(`${skill} (zeluizr/adobe-commerce-skills)`);
+			origen.push(`${skill} (commentemeapp/adobe-commerce-skills)`);
 			continue;
 		}
 		// En adobe/skills la carpeta suele llamarse como la skill; se confirma leyendo el name.
@@ -56,7 +56,7 @@ try {
 }
 
 if (faltan.length) {
-	console.log(`no existen en zeluizr/adobe-commerce-skills ni en adobe/skills: ${faltan.join(", ")}`);
+	console.log(`no existen en commentemeapp/adobe-commerce-skills ni en adobe/skills: ${faltan.join(", ")}`);
 	process.exit(1);
 }
 console.log(`las ${skills.length} skills precargadas existen: ${origen.join(", ")}`);

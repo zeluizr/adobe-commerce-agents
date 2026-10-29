@@ -77,10 +77,10 @@ if [ -f "$MCP" ] && [ -f "$PLUGIN" ]; then
 			if (s.command !== "npx") errores.push("el comando del servidor no es npx");
 			const args = s.args || [];
 			if (!args.includes("-y")) errores.push("falta -y en los args de npx");
-			if (!args.some((a) => /^adobe-commerce-mcp(@.+)?$/.test(a))) errores.push("los args no ejecutan el paquete adobe-commerce-mcp");
+			if (!args.some((a) => /^@commenteme\/adobe-commerce-mcp(@.+)?$/.test(a))) errores.push("los args no ejecutan el paquete @commenteme/adobe-commerce-mcp");
 		}
 		if (errores.length) { console.error(errores.join("\n")); process.exit(1); }
-	' "$PLUGIN" "$MCP" "$SERVIDOR" 2>/tmp/mcp-errores.txt && ok "plugin.json y .mcp.json ejecutan npx -y adobe-commerce-mcp" || {
+	' "$PLUGIN" "$MCP" "$SERVIDOR" 2>/tmp/mcp-errores.txt && ok "plugin.json y .mcp.json ejecutan npx -y @commenteme/adobe-commerce-mcp" || {
 		sed 's/^/    /' /tmp/mcp-errores.txt
 		mal "configuración del servidor MCP"
 	}
@@ -127,7 +127,7 @@ if [ -d "$AGENTES_DIR" ] && ls "$AGENTES_DIR"/*.md >/dev/null 2>&1; then
 	done
 	[ "$AGENTES_MAL" -eq 0 ] && ok "$(ls "$AGENTES_DIR"/*.md | wc -l | tr -d ' ') agentes con frontmatter correcto"
 
-	# Las skills precargadas tienen que existir en zeluizr/adobe-commerce-skills (carpeta skills/) o
+	# Las skills precargadas tienen que existir en commentemeapp/adobe-commerce-skills (carpeta skills/) o
 	# en adobe/skills (cualquier SKILL.md con ese name). Necesita red: sin ella, aviso.
 	SKILLS=$(grep -hE '^[[:space:]]+- [a-z0-9-]+$' "$AGENTES_DIR"/*.md | sed -E 's/^[[:space:]]+- //' | sort -u)
 	if [ -z "$SKILLS" ]; then
