@@ -40,7 +40,7 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-      # Ejecuta el mismo comando que .mcp.json (npx -y adobe-commerce-mcp) y pide la
+      # Ejecuta el mismo comando que .mcp.json (npx -y @commenteme/adobe-commerce-mcp) y pide la
       # lista de tools por stdio: si el paquete deja de publicarse o cambia el nombre de
       # una tool que un agente usa, falla aquí y no en la sesión de quien instaló el plugin.
       # Falla también mientras el paquete no esté publicado en npm.

@@ -6,13 +6,13 @@
 
 **Cinco subagentes de Claude Code y el servidor MCP para desarrollar módulos de Adobe Commerce en PHP.**
 
-![version](https://img.shields.io/github/package-json/v/zeluizr/adobe-commerce-agents/main?filename=plugins%2Fadobe-commerce-agents%2F.claude-plugin%2Fplugin.json&label=version&labelColor=005278&color=FFBD38)
-![license](https://img.shields.io/github/license/zeluizr/adobe-commerce-agents?labelColor=005278&color=FFBD38)
+![version](https://img.shields.io/github/package-json/v/commentemeapp/adobe-commerce-agents/main?filename=plugins%2Fadobe-commerce-agents%2F.claude-plugin%2Fplugin.json&label=version&labelColor=005278&color=FFBD38)
+![license](https://img.shields.io/github/license/commentemeapp/adobe-commerce-agents?labelColor=005278&color=FFBD38)
 
 ## Instalación
 
 ```bash
-/plugin marketplace add zeluizr/adobe-commerce-agents
+/plugin marketplace add commentemeapp/adobe-commerce-agents
 /plugin install adobe-commerce-agents@adobe-commerce-agents
 ```
 
@@ -52,9 +52,9 @@ Para Adobe Commerce (Magento Open Source) en la nube (PaaS) o en servidor propio
 | `adobe-commerce-integration-architect` | Diseña y audita integraciones con ERP, OMS y marketplaces, en PHP o con App Builder, con los trade offs.    | `adobe-commerce-webapi`, `adobe-commerce-cron-and-queues`, `adobe-commerce-events-and-observers`, `adobe-commerce-security` | `lookup-webapi`, `search-docs`, `read-doc`, `explain-config-file`                       | opus      |
 | `adobe-commerce-docs-researcher`       | Busca en la documentación de Adobe Commerce y cita siempre la fuente.                                       | ninguna, a propósito                                                                                                        | `search-docs`, `read-doc`, `explain-config-file`, `lookup-cli-command`, `lookup-webapi` | haiku     |
 
-El servidor MCP es [adobe-commerce-mcp](https://github.com/zeluizr/adobe-commerce-mcp), ejecutado con `npx -y adobe-commerce-mcp`. Trae la documentación de cuatro repositorios oficiales de AdobeDocs, los comandos de `bin/magento`, el esquema OpenAPI de REST y la referencia de GraphQL; no abre conexiones ni pide credenciales. Además de lo que usan los agentes, deja en la conversación principal las herramientas de scaffolding (`scaffold-module`, `add-plugin`, `add-observer`, `add-controller`, `add-db-schema`), que devuelven los archivos para que la conversación los escriba. Las herramientas y los resources están en el [README de adobe-commerce-mcp](https://github.com/zeluizr/adobe-commerce-mcp#herramientas).
+El servidor MCP es [adobe-commerce-mcp](https://github.com/commentemeapp/adobe-commerce-mcp), ejecutado con `npx -y @commenteme/adobe-commerce-mcp`. Trae la documentación de cuatro repositorios oficiales de AdobeDocs, los comandos de `bin/magento`, el esquema OpenAPI de REST y la referencia de GraphQL; no abre conexiones ni pide credenciales. Además de lo que usan los agentes, deja en la conversación principal las herramientas de scaffolding (`scaffold-module`, `add-plugin`, `add-observer`, `add-controller`, `add-db-schema`), que devuelven los archivos para que la conversación los escriba. Las herramientas y los resources están en el [README de adobe-commerce-mcp](https://github.com/commentemeapp/adobe-commerce-mcp#herramientas).
 
-Ningún agente precarga mas de cuatro skills ni tiene `Write`, `Edit` o `NotebookEdit`. Las skills salen de [adobe-commerce-skills](https://github.com/zeluizr/adobe-commerce-skills). Código abierto y sin costo.
+Ningún agente precarga mas de cuatro skills ni tiene `Write`, `Edit` o `NotebookEdit`. Las skills salen de [adobe-commerce-skills](https://github.com/commentemeapp/adobe-commerce-skills). Código abierto y sin costo.
 
 ## Documentación
 
@@ -62,7 +62,7 @@ Ningún agente precarga mas de cuatro skills ni tiene `Write`, `Edit` o `Noteboo
 
 - Claude Code con soporte de plugins.
 - Node `>= 18`, para que `npx` ejecute el servidor MCP.
-- Las skills de [adobe-commerce-skills](https://github.com/zeluizr/adobe-commerce-skills), con `npx skills add zeluizr/adobe-commerce-skills`. Sin ellas los agentes funcionan degradados: Claude Code omite las skills que no encuentra y conserva el flujo de cada agente, pero sin el conocimiento de la plataforma que hace precisas sus respuestas.
+- Las skills de [adobe-commerce-skills](https://github.com/commentemeapp/adobe-commerce-skills), con `npx skills add commentemeapp/adobe-commerce-skills`. Sin ellas los agentes funcionan degradados: Claude Code omite las skills que no encuentra y conserva el flujo de cada agente, pero sin el conocimiento de la plataforma que hace precisas sus respuestas.
 - Opcional: las skills oficiales de App Builder, con `npx skills add adobe/skills`. Ningún agente las precarga; el arquitecto las pide cuando la integración sale del proceso.
 - Para `adobe-commerce-qa`: PHP y las dependencias de Composer instaladas en el proyecto (`vendor/bin/phpcs` con el Magento Coding Standard, `vendor/bin/phpunit` y, si lo ocupas, `vendor/bin/phpstan`). La compilación de DI y los controles de la base necesitan además una instalación lista para `bin/magento`.
 
@@ -101,7 +101,7 @@ claude --add-dir ~/adobedocs
 .claude-plugin/marketplace.json       catálogo del marketplace de Claude Code
 plugins/adobe-commerce-agents/
 	.claude-plugin/plugin.json          manifiesto del plugin; mcpServers apunta a .mcp.json
-	.mcp.json                           el servidor MCP adobe-commerce: npx -y adobe-commerce-mcp
+	.mcp.json                           el servidor MCP adobe-commerce: npx -y @commenteme/adobe-commerce-mcp
 	agents/                             los cinco agentes, uno por archivo
 docs/agentes.md                       por que cada agente es como es
 scripts/verificar.sh                  gate de este repositorio
@@ -115,14 +115,14 @@ assets/                               banner del README, social preview y avatar
 Este repositorio pide Node `>= 20` ([package.json](package.json)); el `>= 18` de arriba es para ejecutar el servidor MCP. Los cinco agentes viven en [plugins/adobe-commerce-agents/agents/](plugins/adobe-commerce-agents/agents/) y su conexión MCP en [.mcp.json](plugins/adobe-commerce-agents/.mcp.json).
 
 ```bash
-git clone https://github.com/zeluizr/adobe-commerce-agents.git
+git clone https://github.com/commentemeapp/adobe-commerce-agents.git
 cd adobe-commerce-agents
 npm ci
 ./scripts/verificar.sh
 node scripts/probar-mcp.mjs
 ```
 
-`scripts/verificar.sh` es el gate, el mismo que corre el CI: JSON válido, la misma versión en los tres manifiestos, la configuración del servidor MCP, el frontmatter de cada agente (nombre igual al archivo, `description`, tool `Skill` presente, sin `Write`, `Edit` ni `NotebookEdit`, máximo cuatro skills precargadas, prefijo MCP propio), que cada skill precargada exista en `zeluizr/adobe-commerce-skills` o en `adobe/skills`, `claude plugin validate --strict`, Prettier, `bash -n` y una búsqueda de rastros que no deben llegar a un repositorio público. Sin red, la comprobación de las skills queda como aviso, nunca en verde.
+`scripts/verificar.sh` es el gate, el mismo que corre el CI: JSON válido, la misma versión en los tres manifiestos, la configuración del servidor MCP, el frontmatter de cada agente (nombre igual al archivo, `description`, tool `Skill` presente, sin `Write`, `Edit` ni `NotebookEdit`, máximo cuatro skills precargadas, prefijo MCP propio), que cada skill precargada exista en `commentemeapp/adobe-commerce-skills` o en `adobe/skills`, `claude plugin validate --strict`, Prettier, `bash -n` y una búsqueda de rastros que no deben llegar a un repositorio público. Sin red, la comprobación de las skills queda como aviso, nunca en verde.
 
 `scripts/probar-mcp.mjs` arranca el servidor por stdio y falla si una herramienta que un agente declara no existe, o si un agente declara una de scaffolding. Para probar contra un build local del servidor:
 

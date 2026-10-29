@@ -5,6 +5,15 @@ y las versiones siguen [SemVer](https://semver.org/lang/es/).
 
 ## [Sin publicar]
 
+## [0.1.1] - 2026-10-29
+
+### Cambiado
+
+- El servidor MCP se ejecuta con `npx -y @commenteme/adobe-commerce-mcp`: el paquete cambió de nombre en npm y `adobe-commerce-mcp`
+  queda descontinuado. `scripts/verificar.sh` exige el nombre nuevo en `.mcp.json`.
+- El repositorio pasa a `github.com/commentemeapp/adobe-commerce-agents`; se instala con
+  `/plugin marketplace add commentemeapp/adobe-commerce-agents`. Los enlaces a los otros repositorios también apuntan a `commentemeapp`.
+
 ## [0.1.0] - 2026-10-25
 
 ### Agregado

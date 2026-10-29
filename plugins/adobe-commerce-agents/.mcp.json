@@ -3,7 +3,7 @@
 		"adobe-commerce": {
 			"type": "stdio",
 			"command": "npx",
-			"args": ["-y", "adobe-commerce-mcp"]
+			"args": ["-y", "@commenteme/adobe-commerce-mcp"]
 		}
 	}
 }
